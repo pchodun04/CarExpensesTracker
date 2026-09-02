@@ -64,7 +64,7 @@ public class MainFrame extends JFrame{
         expenseTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         expenseTable.setRowHeight(24);
 
-        expenseTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        expenseTable.getColumnModel().getColumn(0).setMinWidth(0);
         expenseTable.getColumnModel().getColumn(0).setMaxWidth(0);
 
         JScrollPane scrollPane = new JScrollPane(expenseTable);
@@ -74,6 +74,13 @@ public class MainFrame extends JFrame{
 
     private void buildBottomPanel() {
         JPanel bottomPanel = new JPanel();
+        JButton addExpenseButton = new JButton("Dodaj wydatek");
+        JButton deleteExpenseButton = new JButton("Usuń wydatek");
+        addExpenseButton.addActionListener(e -> openExpenseForm());
+        deleteExpenseButton.addActionListener(e -> deleteExpense());
+        bottomPanel.add(addExpenseButton);
+        bottomPanel.add(deleteExpenseButton);
+        add(bottomPanel, BorderLayout.SOUTH);
     }
 
     private void refreshCars() {
@@ -101,7 +108,7 @@ public class MainFrame extends JFrame{
         }
 
         try {
-            for(Expense expense : db.getAllExpenses()){
+            for(Expense expense : db.getAllExpensesByCarId(selectedCar.getId())){
                 tableModel.addRow(new Object[]{
                         expense.getId(),
                         expense.getPartName(),
@@ -115,6 +122,52 @@ public class MainFrame extends JFrame{
             throw new RuntimeException(e);
         }
     }
+    private int getSelectedExpenseId(){
+        int row = expenseTable.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Wybierz wydatek");
+            return -1;
+        }
+        return (int) tableModel.getValueAt(row, 0);
+    }
 
+    private void openExpenseForm() {
+        Car selectedCar = (Car) carComboBox.getSelectedItem();
+        assert selectedCar != null;
+        new ExpenseForm(this, db, selectedCar.getId(), this::refreshExpenses);
+    }
+
+    private void openCarForm() {
+        new CarForm(this, db, this::refreshCars);
+    }
+
+    private void deleteCar() {
+        Car selectedCar = (Car) carComboBox.getSelectedItem();
+        if(selectedCar == null){
+            return;
+        }
+        int confirm = JOptionPane.showConfirmDialog(this, "Usunąć " + selectedCar + "?", "Potwierdź", JOptionPane.YES_NO_OPTION);
+        if(confirm == JOptionPane.YES_OPTION){
+            try{
+                db.deleteCar(selectedCar.getId());
+                refreshCars();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private void deleteExpense() {
+        int id = getSelectedExpenseId();
+        if(id == -1){
+            return;
+        }
+        try {
+            db.deleteExpense(id);
+            refreshExpenses();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }
