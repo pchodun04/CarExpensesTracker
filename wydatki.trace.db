@@ -1,4 +1,0 @@
-2026-09-02 18:15:26.815213+02:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Błąd składniowy w wyrażeniu SQL "CREATE TABLE IF NOT EXISTS car (id INT AUTO_INCREMENT PRIMARY KEY, make VARCHAR(50) NOT NULL, model VARCHAR(50) NOT NULL, generation VARCHAR(5) NOT NULL, [*]year INT NOT NULL, engine VARCHAR(50) NOT NULL )"; oczekiwano "identifier"
-Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS car (id INT AUTO_INCREMENT PRIMARY KEY, make VARCHAR(50) NOT NULL, model VARCHAR(50) NOT NULL, generation VARCHAR(5) NOT NULL, [*]year INT NOT NULL, engine VARCHAR(50) NOT NULL )"; expected "identifier"; SQL statement:
-CREATE TABLE IF NOT EXISTS car (id INT AUTO_INCREMENT PRIMARY KEY, make VARCHAR(50) NOT NULL, model VARCHAR(50) NOT NULL, generation VARCHAR(5) NOT NULL, year INT NOT NULL, engine VARCHAR(50) NOT NULL ) [42001-224]
