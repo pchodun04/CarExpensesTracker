@@ -16,6 +16,8 @@ target/
 target/
 *.mv.db
 *.trace.db
+*.msi
+*.exe
 
 ### Eclipse ###
 .apt_generated
