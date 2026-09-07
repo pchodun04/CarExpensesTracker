@@ -19,6 +19,9 @@ public class MainFrame extends JFrame{
     public MainFrame(Database db) {
         this.db = db;
         setTitle("Wydatki samochodowe");
+        java.net.URL iconURL = getClass().getResource("/car_expense_icon.jpg");
+        assert iconURL != null;
+        setIconImage(new ImageIcon(iconURL).getImage());
         setSize(850, 550);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
