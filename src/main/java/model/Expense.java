@@ -11,9 +11,7 @@ public class Expense {
     private LocalDate changeDate;
     private int mileage;
 
-    public Expense(int id, int carId, String partName, String brandName, double price, LocalDate
-
- changeDate, int mileage) {
+    public Expense(int id, int carId, String partName, String brandName, double price, LocalDate changeDate, int mileage) {
         this.id = id;
         this.carId = carId;
         this.partName = partName;
@@ -23,33 +21,10 @@ public class Expense {
         this.mileage = mileage;
     }
 
-    public Expense(int id, int carId, String partName, double price, LocalDate
-
- changeDate, int mileage) {
-        this.id = id;
-        this.carId = carId;
-        this.partName = partName;
-        this.price = price;
-        this.changeDate = changeDate;
-        this.mileage = mileage;
-    }
-
-    public Expense(int carId, String partName, String brandName, double price, LocalDate
-
-            changeDate, int mileage) {
+    public Expense(int carId, String partName, String brandName, double price, LocalDate changeDate, int mileage) {
         this.carId = carId;
         this.partName = partName;
         this.brandName = brandName;
-        this.price = price;
-        this.changeDate = changeDate;
-        this.mileage = mileage;
-    }
-
-    public Expense(int carId, String partName, double price, LocalDate
-
-            changeDate, int mileage) {
-        this.carId = carId;
-        this.partName = partName;
         this.price = price;
         this.changeDate = changeDate;
         this.mileage = mileage;
@@ -97,13 +72,13 @@ public class Expense {
 
     public LocalDate
 
- getChangeDate() {
+    getChangeDate() {
         return changeDate;
     }
 
     public void setChangeDate(LocalDate
 
- changeDate) {
+                                      changeDate) {
         this.changeDate = changeDate;
     }
 

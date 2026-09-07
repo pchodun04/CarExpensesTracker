@@ -1,6 +1,5 @@
 import database.Database;
 import ui.MainFrame;
-
 import javax.swing.*;
 
 public class MainApp {

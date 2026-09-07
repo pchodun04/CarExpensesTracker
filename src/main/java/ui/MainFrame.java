@@ -13,6 +13,7 @@ public class MainFrame extends JFrame{
     private JComboBox<Car> carComboBox;
     private JTable expenseTable;
     private DefaultTableModel tableModel;
+    private JLabel sumLabel = new JLabel("Suma: 0.00 zł");
 
     public MainFrame(Database db) {
         this.db = db;
@@ -43,10 +44,12 @@ public class MainFrame extends JFrame{
         JButton deleteCarButton = new JButton("Usuń");
         deleteCarButton.addActionListener(e -> deleteCar());
 
+
         topPanel.add(new JLabel("Samochód"));
         topPanel.add(carComboBox);
         topPanel.add(addCarButton);
         topPanel.add(deleteCarButton);
+        topPanel.add(sumLabel);
 
         add(topPanel, BorderLayout.NORTH);
     }
@@ -76,10 +79,15 @@ public class MainFrame extends JFrame{
         JPanel bottomPanel = new JPanel();
         JButton addExpenseButton = new JButton("Dodaj wydatek");
         JButton deleteExpenseButton = new JButton("Usuń wydatek");
+        JButton editExpenseButton = new JButton("Edytuj wydatek");
+
         addExpenseButton.addActionListener(e -> openExpenseForm());
         deleteExpenseButton.addActionListener(e -> deleteExpense());
+        editExpenseButton.addActionListener(e -> openEditExpenseForm());
+
         bottomPanel.add(addExpenseButton);
         bottomPanel.add(deleteExpenseButton);
+        bottomPanel.add(editExpenseButton);
         add(bottomPanel, BorderLayout.SOUTH);
     }
 
@@ -102,6 +110,7 @@ public class MainFrame extends JFrame{
 
     private void refreshExpenses() {
         tableModel.setRowCount(0);
+        double total = 0;
         Car selectedCar = (Car) carComboBox.getSelectedItem();
         if(selectedCar == null){
             return;
@@ -117,11 +126,14 @@ public class MainFrame extends JFrame{
                         expense.getChangeDate(),
                         expense.getMileage()
                 });
+                total += expense.getPrice();
             }
+            sumLabel.setText(String.format("Suma: %.2f zł", total));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
     private int getSelectedExpenseId(){
         int row = expenseTable.getSelectedRow();
         if (row == -1) {
@@ -135,6 +147,19 @@ public class MainFrame extends JFrame{
         Car selectedCar = (Car) carComboBox.getSelectedItem();
         assert selectedCar != null;
         new ExpenseForm(this, db, selectedCar.getId(), this::refreshExpenses);
+    }
+
+    private void openEditExpenseForm() {
+        int id = getSelectedExpenseId();
+        if(id == -1){
+            return;
+        }
+        try{
+            Expense expense = db.getExpenseById(id);
+            new ExpenseForm(this, db, expense, this::refreshExpenses);
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
     private void openCarForm() {

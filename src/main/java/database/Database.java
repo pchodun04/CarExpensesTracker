@@ -18,6 +18,10 @@ public class Database {
         conn = DriverManager.getConnection(url, user, password);
     }
 
+    public Database(String url, String user, String password) throws Exception {
+        conn = DriverManager.getConnection(url, user, password);
+    }
+
     public void createTable() throws Exception {
         Statement statement = conn.createStatement();
         statement.execute("CREATE TABLE IF NOT EXISTS car (id INT AUTO_INCREMENT PRIMARY KEY, make VARCHAR(50) NOT NULL, model VARCHAR(50) NOT NULL, generation VARCHAR(5) NOT NULL, production_year INT NOT NULL, engine VARCHAR(50) NOT NULL )");
@@ -69,6 +73,18 @@ public class Database {
         ps.executeUpdate();
     }
 
+    public void updateExpense(int id, String partName, String brandName, double price, LocalDate changeDate, int mileage) throws Exception {
+        String sql = "UPDATE expense set part_name = ?, brand_name = ?, price = ?, change_date = ?, mileage = ? WHERE id = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, partName);
+        ps.setString(2, brandName);
+        ps.setDouble(3, price);
+        ps.setDate  (4, java.sql.Date.valueOf(changeDate));
+        ps.setInt   (5, mileage);
+        ps.setInt   (6, id);
+        ps.executeUpdate();
+    }
+
     public void deleteExpense(int id) throws Exception {
         String sql = "DELETE FROM expense WHERE id = ?";
         PreparedStatement preparedStatement = conn.prepareStatement(sql);
@@ -92,4 +108,23 @@ public class Database {
         return expenses;
     }
 
+    public Expense getExpenseById(int id) throws Exception {
+        String sql = "SELECT * FROM expense WHERE id = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return new Expense(
+                    rs.getInt("id"), rs.getInt("carId"),
+                    rs.getString("part_name"), rs.getString("brand_name"),
+                    rs.getDouble("price"),
+                    rs.getDate("change_date").toLocalDate(),
+                    rs.getInt("mileage")
+            );
+        }
+        return null;
+    }
+    public void closeConnection() throws Exception {
+        conn.close();
+    }
 }

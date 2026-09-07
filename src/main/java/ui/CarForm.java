@@ -68,6 +68,7 @@ public class CarForm extends JDialog{
         c.gridy = 5;
         c.anchor = GridBagConstraints.EAST;
         add(saveButton, c);
+        getRootPane().setDefaultButton(saveButton);
     }
 
     private void save() {

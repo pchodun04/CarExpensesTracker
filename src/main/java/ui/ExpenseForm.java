@@ -16,7 +16,8 @@ public class ExpenseForm extends JDialog {
     private JTextField mileageField = new JTextField(22);
 
     private final Database db;
-    private final int carId;
+    private int carId;
+    private int editId;
     private final Runnable onSave;
 
     public ExpenseForm(JFrame parent, Database db, int carId, Runnable onSave) {
@@ -24,12 +25,32 @@ public class ExpenseForm extends JDialog {
         this.db = db;
         this.carId = carId;
         this.onSave = onSave;
+        this.editId = -1;
 
         buildUI();
         pack();
         setLocationRelativeTo(getParent());
         setVisible(true);
     }
+
+    public ExpenseForm(JFrame parent, Database db, Expense expense, Runnable onSave) {
+        super(parent, "Edytuj wydatek", true);
+        this.editId = expense.getId();
+        this.db = db;
+        this.onSave = onSave;
+
+        partNameField.setText(expense.getPartName());
+        brandNameField.setText(expense.getBrandName());
+        priceField.setText(String.valueOf(expense.getPrice()));
+        changeDateField.setText(expense.getChangeDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+        mileageField.setText(String.valueOf(expense.getMileage()));
+
+        buildUI();
+        pack();
+        setLocationRelativeTo(getParent());
+        setVisible(true);
+    }
+
     private void buildUI() {
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -72,6 +93,7 @@ public class ExpenseForm extends JDialog {
         c.gridy = 5;
         c.anchor = GridBagConstraints.EAST;
         add(saveButton, c);
+        getRootPane().setDefaultButton(saveButton);
     }
 
     private void save() {
@@ -84,14 +106,19 @@ public class ExpenseForm extends JDialog {
             int mileage = Integer.parseInt(mileageField.getText().trim());
 
             if(partName.isBlank()){
-                JOptionPane.showMessageDialog(this, "Please enter a part name", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Wprowadź nazwe części", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            db.addExpense(carId, partName, partBrand, partPrice, changeDate, mileage);
+            if(editId == -1){
+                db.addExpense(carId, partName, partBrand, partPrice, changeDate, mileage);
+            }else{
+                db.updateExpense(editId, partName, partBrand, partPrice, changeDate, mileage);
+            }
+
             onSave.run();
             dispose();
         }catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(this, e, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
