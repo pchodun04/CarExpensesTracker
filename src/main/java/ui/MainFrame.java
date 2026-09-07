@@ -5,6 +5,7 @@ import model.Car;
 import model.Expense;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicButtonUI;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.time.format.DateTimeFormatter;
@@ -14,7 +15,7 @@ public class MainFrame extends JFrame{
     private JComboBox<Car> carComboBox;
     private JTable expenseTable;
     private DefaultTableModel tableModel;
-    private JLabel sumLabel = new JLabel("Suma: 0.00 zł");
+    private JButton sumButton = new JButton("Suma: 0.00 zł");
 
     public MainFrame(Database db) {
         this.db = db;
@@ -24,7 +25,20 @@ public class MainFrame extends JFrame{
         setIconImage(new ImageIcon(iconURL).getImage());
         setSize(850, 550);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
+        setContentPane(new JPanel(new BorderLayout()) {
+            Image image = new ImageIcon(getClass().getResource("/car_expense_icon.jpg")).getImage();
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (image != null) {
+                    Graphics2D g2d = (Graphics2D) g.create();
+                    g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.70f));
+                    g2d.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+                    g2d.dispose();
+                }
+            }
+        });
 
         buildTopPanel();
         buildTable();
@@ -47,14 +61,32 @@ public class MainFrame extends JFrame{
         addCarButton.addActionListener(e -> openCarForm());
         JButton deleteCarButton = new JButton("Usuń");
         deleteCarButton.addActionListener(e -> deleteCar());
+        JLabel samochodText = new JLabel("Samochód");
 
-
-        topPanel.add(new JLabel("Samochód"));
+        samochodText.setForeground(Color.BLACK);
+        //samochodText.setOpaque(true);
+        topPanel.add(samochodText);
+        carComboBox.setForeground(Color.BLACK);
+        carComboBox.setOpaque(true);
+        carComboBox.setBackground(Color.lightGray);
         topPanel.add(carComboBox);
+        addCarButton.setForeground(Color.BLACK);
+        addCarButton.setOpaque(true);
+        addCarButton.setBackground(Color.lightGray);
         topPanel.add(addCarButton);
+        deleteCarButton.setForeground(Color.BLACK);
+        deleteCarButton.setOpaque(true);
+        deleteCarButton.setBackground(Color.lightGray);
+        sumButton.setOpaque(true);
         topPanel.add(deleteCarButton);
-        topPanel.add(sumLabel);
+        sumButton.setBackground(new Color(235, 100, 100));
+        sumButton.setForeground(Color.BLACK);
+        sumButton.setFocusPainted(false);
+        sumButton.setBorderPainted(false);
+        sumButton.setUI(new BasicButtonUI());
+        topPanel.add(sumButton);
 
+        topPanel.setOpaque(false);
         add(topPanel, BorderLayout.NORTH);
     }
 
@@ -74,9 +106,17 @@ public class MainFrame extends JFrame{
         expenseTable.getColumnModel().getColumn(0).setMinWidth(0);
         expenseTable.getColumnModel().getColumn(0).setMaxWidth(0);
 
+        expenseTable.setBackground(new Color(220, 220, 220));
+        expenseTable.getTableHeader().setBackground(Color.lightGray);
+        expenseTable.getTableHeader().setForeground(Color.black);
+        expenseTable.getTableHeader().setOpaque(true);
+        expenseTable.setForeground(Color.black);
+        expenseTable.setOpaque(true);
         JScrollPane scrollPane = new JScrollPane(expenseTable);
-        add(scrollPane, BorderLayout.CENTER);
 
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setOpaque(false);
+        add(scrollPane, BorderLayout.CENTER);
     }
 
     private void buildBottomPanel() {
@@ -89,9 +129,20 @@ public class MainFrame extends JFrame{
         deleteExpenseButton.addActionListener(e -> deleteExpense());
         editExpenseButton.addActionListener(e -> openEditExpenseForm());
 
+        addExpenseButton.setBackground(Color.lightGray);
+        addExpenseButton.setForeground(Color.BLACK);
+        addExpenseButton.setOpaque(true);
         bottomPanel.add(addExpenseButton);
+        deleteExpenseButton.setBackground(Color.lightGray);
+        deleteExpenseButton.setForeground(Color.BLACK);
+        deleteExpenseButton.setOpaque(true);
         bottomPanel.add(deleteExpenseButton);
+        editExpenseButton.setBackground(Color.lightGray);
+        editExpenseButton.setForeground(Color.BLACK);
+        editExpenseButton.setOpaque(true);
         bottomPanel.add(editExpenseButton);
+
+        bottomPanel.setOpaque(false);
         add(bottomPanel, BorderLayout.SOUTH);
     }
 
@@ -132,7 +183,7 @@ public class MainFrame extends JFrame{
                 });
                 total += expense.getPrice();
             }
-            sumLabel.setText(String.format("Suma: %.2f zł", total));
+            sumButton.setText(String.format("Suma: %.2f zł", total));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
