@@ -7,6 +7,7 @@ import model.Expense;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.time.format.DateTimeFormatter;
 
 public class MainFrame extends JFrame{
     private Database db;
@@ -122,9 +123,9 @@ public class MainFrame extends JFrame{
                         expense.getId(),
                         expense.getPartName(),
                         expense.getBrandName(),
-                        expense.getPrice(),
-                        expense.getChangeDate(),
-                        expense.getMileage()
+                        String.format("%.2f zł", expense.getPrice()),
+                        expense.getChangeDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                        expense.getMileage() + " km"
                 });
                 total += expense.getPrice();
             }

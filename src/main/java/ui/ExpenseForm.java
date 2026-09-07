@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 public class ExpenseForm extends JDialog {
     private JTextField partNameField = new JTextField(22);
     private JTextField brandNameField = new JTextField(22);
-    private JTextField priceField = new JTextField(10);
+    private JTextField priceField = new JTextField(10 );
     private JTextField changeDateField = new JTextField(12);
     private JTextField mileageField = new JTextField(22);
 
@@ -73,7 +73,10 @@ public class ExpenseForm extends JDialog {
         c.gridy = 2;
         add(new JLabel("Cena"), c);
         c.gridx = 1;
-        add(priceField, c);
+        JPanel pricePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        pricePanel.add(priceField);
+        pricePanel.add(new JLabel(" zł"));
+        add(pricePanel, c);
 
         c.gridx = 0;
         c.gridy = 3;
@@ -85,7 +88,10 @@ public class ExpenseForm extends JDialog {
         c.gridy = 4;
         add(new JLabel("Przebieg"), c);
         c.gridx = 1;
-        add(mileageField, c);
+        JPanel mileagePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        mileagePanel.add(mileageField);
+        mileagePanel.add(new JLabel(" km"));
+        add(mileagePanel, c);
 
         JButton saveButton = new JButton("Zapisz");
         saveButton.addActionListener(e -> save());

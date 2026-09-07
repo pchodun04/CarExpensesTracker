@@ -12,7 +12,7 @@ public class Database {
     private Connection conn;
 
     public Database() throws Exception {
-        String url = "jdbc:h2:./wydatki;AUTO_SERVER=TRUE";
+        String url = "jdbc:h2:~/wydatki;AUTO_SERVER=TRUE";
         String user = "carexpensetracker";
         String password = "";
         conn = DriverManager.getConnection(url, user, password);
