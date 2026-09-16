@@ -10,7 +10,7 @@ Prosta aplikacja desktopowa służąca do śledzenia wydatków na naprawy samoch
 Java, Java Swing, Baza danych H2, Maven, JUnit 5
 
 ## Uruchamianie
-Z zakładki releases na githubie można pobrać instalator .exe który zainstaluje program i stworzy skrót na ekranie głownym.
+Z zakładki releases na githubie można pobrać instalator .exe który zainstaluje program i stworzy skrót na ekranie głównym.
 
 <img width="829" height="536" alt="car-expense-tracker" src="https://github.com/user-attachments/assets/457d1c85-6e29-4122-ae94-2644bfb9cac6" />
 
